@@ -12,7 +12,7 @@ def get_tasks():
 @api.route('/api/tasks', methods=['POST'])
 def create_task():
     data = request.json
-    new_task = BackupJob(name=data['name'], status=data.get('status', 'Pending'))
+    new_task = BackupJob(name=data['name'], status=data.get('status', 'Added'))
     db.session.add(new_task)
     db.session.commit()
     return jsonify(new_task.to_dict()), 201
@@ -24,5 +24,16 @@ def delete_task(id):
         db.session.delete(task)
         db.session.commit()
         return jsonify({"message": "Task deleted successfully"}), 200
+    else:
+        return jsonify({"message": "Task not found"}), 404
+
+@api.route('/api/tasks/<int:id>', methods=['PATCH'])
+def update_task_status(id):
+    data = request.json
+    task = BackupJob.query.get(id)
+    if task:
+        task.status = data.get('status', task.status)
+        db.session.commit()
+        return jsonify(task.to_dict()), 200
     else:
         return jsonify({"message": "Task not found"}), 404
