@@ -136,17 +136,39 @@ async function deleteTask(id) {
         const response = await fetch(`${API_URL}/${id}`, { method: "DELETE" });
         if (!response.ok) throw new Error("Failed to delete task");
 
-        // Анимация исчезновения
         const taskElement = document.querySelector(`.task[data-id="${id}"]`);
         if (taskElement) {
             taskElement.classList.add("fade-out");
             setTimeout(() => {
                 loadTasks();
-            }, 300); // Ждем, пока анимация завершится
+            }, 300);
         }
     } catch (error) {
         console.error("Error deleting task:", error);
     }
+}
+
+// Update task status
+async function updateTaskStatus(id, status) {
+    try {
+        const response = await fetch(`${API_URL}/${id}`, {
+            method: "PATCH",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ status }),
+        });
+        if (!response.ok) throw new Error("Failed to update task status");
+
+        loadTasks();
+    } catch (error) {
+        console.error("Error updating task status:", error);
+    }
+}
+
+// Show status menu
+function showStatusMenu(id) {
+    const taskElement = document.querySelector(`.task[data-id="${id}"]`);
+    const statusMenu = taskElement.querySelector(".status-menu");
+    statusMenu.classList.toggle("hidden");
 }
 
 // Initialize
