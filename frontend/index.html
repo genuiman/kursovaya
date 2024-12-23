@@ -7,15 +7,33 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <div class="container">
-        <h1>Backup Manager</h1>
-        
-        <form id="task-form">
-            <input type="text" id="task-name" placeholder="Enter a task name" required />
-            <button type="submit">Add Backup</button>
-        </form>
-        
-        <div id="task-list" class="task-list"></div>
+    <header>
+        <nav>
+            <ul>
+                <li><a href="#" id="main-tab" class="active">Main</a></li>
+                <li><a href="#" id="history-tab">History</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <div id="main-section">
+        <div class="container">
+            <h1>Backup Manager</h1>
+            
+            <form id="task-form">
+                <input type="text" id="task-name" placeholder="Enter a task name" required />
+                <button type="submit">Add Backup</button>
+            </form>
+            
+            <div id="task-list" class="task-list"></div>
+        </div>
+    </div>
+
+    <div id="history-section" class="hidden">
+        <div class="container">
+            <h1>History</h1>
+            <div id="history-list"></div>
+        </div>
     </div>
 
     <script src="script.js"></script>
