@@ -4,7 +4,7 @@ FROM python:3.10-slim
 WORKDIR /app
 
 # Копируем файл зависимостей (если он есть)
-COPY requirements.txt .
+COPY requirements.txt /app/requirements.txt
 
 # Устанавливаем зависимости
 RUN pip install --no-cache-dir -r requirements.txt
