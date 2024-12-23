@@ -19,6 +19,7 @@ async function loadTasks() {
                 <span>${task.name} <span class="status ${task.status.toLowerCase()}">${task.status}</span></span>
                 <div class="task-buttons">
                     <button onclick="toggleStatusMenu(${task.id})">Change Status</button>
+                    <button onclick="scheduleTask(${task.id})">Schedule Backup</button> 
                     <button onclick="deleteTask(${task.id})">Delete</button>
                 </div>
             `;
@@ -27,7 +28,7 @@ async function loadTasks() {
             statusMenu.className = "status-menu hidden";
             statusMenu.setAttribute("id", `status-menu-${task.id}`);
             statusMenu.innerHTML = `
-                <div onclick="updateTaskStatus(${task.id}, '(Not Started))')">Not Started</div>
+                <div onclick="updateTaskStatus(${task.id}, '(Not Started)')">Not Started</div>
                 <div onclick="updateTaskStatus(${task.id}, '(Waiting)')">Waiting</div>
                 <div onclick="updateTaskStatus(${task.id}, '(Completed)')">Completed</div>
             `;
@@ -170,6 +171,28 @@ function showStatusMenu(id) {
     const statusMenu = taskElement.querySelector(".status-menu");
     statusMenu.classList.toggle("hidden");
 }
+
+async function scheduleTask(taskId) {
+    const hours = prompt("Enter hours:");
+    const minutes = prompt("Enter minutes:");
+    const seconds = prompt("Enter seconds:");
+
+    if (!hours || !minutes || !seconds) return;
+
+    try {
+        const response = await fetch(`/api/schedule/${taskId}`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ hours: parseInt(hours), minutes: parseInt(minutes), seconds: parseInt(seconds) }),
+        });
+        if (!response.ok) throw new Error("Failed to schedule task");
+        alert("Task scheduled successfully!");
+        loadTasks();
+    } catch (error) {
+        console.error("Error scheduling task:", error);
+    }
+}
+
 
 // Initialize
 document.getElementById("task-form").addEventListener("submit", addTask);

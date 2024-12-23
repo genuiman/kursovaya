@@ -1,10 +1,14 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
+from apscheduler.schedulers.background import BackgroundScheduler
 import os
 
 db = SQLAlchemy()
 migrate = Migrate()
+
+scheduler = BackgroundScheduler()
+scheduler.start()
 
 def create_app():
     app = Flask(__name__)
